@@ -1,5 +1,6 @@
 package examples.autonomous_rescue_coordination_system;
 
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -11,22 +12,22 @@ public class MedicAgent extends Agent {
     protected void setup() {
         System.out.println(getLocalName() + ": started.");
 
-        addBehaviour(new CyclicBehaviour() {
+        addBehaviour(new CyclicBehaviour(this) {
             @Override
             public void action() {
-                MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
-                ACLMessage msg = receive(mt);
+                ACLMessage msg = receive(MessageTemplate.MatchPerformative( ACLMessage.REQUEST ));
 
                 if (msg != null) {
-                    System.out.println(getLocalName() + " received treatment request: " + msg.getContent());
+                    String location = msg.getContent().replace("Assist ", "").trim();
+                    System.out.println(getLocalName() + " treating victim at: " + location);
 
                     // simulate successful treatment
-                    ACLMessage reply = msg.createReply();
-                    reply.setPerformative(ACLMessage.INFORM);
-                    reply.setContent("Victim treated at " + msg.getContent());
-                    send(reply);
+                    ACLMessage treatedMsg = new ACLMessage(ACLMessage.INFORM);
+                    treatedMsg.addReceiver(new AID( "commander", AID.ISLOCALNAME ));
+                    treatedMsg.setContent("TREATED at " + location);
+                    send(treatedMsg);
 
-                    System.out.println(getLocalName() + " sent treatment report.");
+                    System.out.println(getLocalName() + " reported TREATED at: " + location);
                 } else {
                     block();
                 }

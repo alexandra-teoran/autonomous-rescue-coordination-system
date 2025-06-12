@@ -1,5 +1,6 @@
 package examples.autonomous_rescue_coordination_system;
 
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -7,6 +8,9 @@ import jade.lang.acl.ACLMessage;
 public class VictimAgent extends Agent {
 
     private int health = 100; // good health at the start, decreases over time
+    private boolean hungry = true;
+    private boolean injured = true;
+    private boolean critical = true;
 
     @Override
     protected void setup() {
@@ -17,17 +21,21 @@ public class VictimAgent extends Agent {
             @Override
             protected void onTick() {
                 // simulate health degradation if no help is provided
-                health -= 10;
-                System.out.println(getLocalName() + ": health = " + health);
+                if(health > 0) {
+                    health -= 10;
+                    System.out.println(getLocalName() + ": health = " + health);
 
-                // inform Commander if health gets critical
-                if (health <= 50) {
-                    ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-                    msg.addReceiver(getAID("CommanderAgent"));
-                    msg.setContent("Victim critical at my location. Health = " + health);
-                    send(msg);
-
-                    System.out.println(getLocalName() + " sent critical health update.");
+                    // inform Commander if health gets critical
+                    if (health <= 50) {
+                        ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+                        msg.addReceiver(new AID( "commander", AID.ISLOCALNAME ));
+                        String status = (injured ? "injured" : "") +
+                                (critical ? " critical" : "") +
+                                (hungry ? " hungry" : "");
+                        msg.setContent(status);
+                        send(msg);
+                        System.out.println(getLocalName() + " reported worsening status.");
+                    }
                 }
             }
         });
