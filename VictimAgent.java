@@ -25,7 +25,7 @@ public class VictimAgent extends Agent {
                     health -= 10;
                     System.out.println(getLocalName() + ": health = " + health);
 
-                    // inform Commander if health gets critical
+                    // send message to commander if health is critical
                     if (health <= 50) {
                         ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
                         msg.addReceiver(new AID( "commander", AID.ISLOCALNAME ));

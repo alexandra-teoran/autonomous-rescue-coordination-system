@@ -24,8 +24,10 @@ public class SupplyAgent extends Agent {
                 if (msg != null) {
                     System.out.println(getLocalName() + " received supply request: " + msg.getContent());
                     String location = msg.getContent().replace("Deliver to ", "").replace("(RETRY)", "").trim();
-                    boolean fail = random.nextInt(100) < 20; // 20% șanse de eșec
+                    // there is a 20% chance of failure to simulate real-world scenarios
+                    boolean fail = random.nextInt(100) < 20;
 
+                    // send message to commander with the result of the delivery
                     if (fail) {
                         System.out.println(getLocalName() + " FAILED to deliver at: " + location);
                         ACLMessage failMsg = new ACLMessage(ACLMessage.INFORM);

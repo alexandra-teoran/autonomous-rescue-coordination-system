@@ -23,7 +23,7 @@ public class DroneAgent extends Agent {
                 msg.addReceiver(new AID( "commander", AID.ISLOCALNAME ));
 
                 if (random.nextBoolean()) {
-                    // simulate a victim
+                    // simulate identifying a victim
                     String[] statuses = {"injured", "hungry", "critical", "injured and hungry"};
                     String status = statuses[random.nextInt(statuses.length)];
                     String victimReport = "VICTIM at (" + random.nextInt(100) + "," + random.nextInt(100) + ") - " + status;

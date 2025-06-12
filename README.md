@@ -22,3 +22,10 @@ The project implements an intelligent rescue coordination system using JADE. The
 
 ### How to run the application
 
+Compile the source code
+
+`javac -classpath "lib/jade.jar;classes" -d classes src/examples/autonomous-rescue-coordination-system/*.java -Xlint`
+
+Start the GUI
+
+`java -classpath "lib/jade.jar;classes" examples.autonomous_rescue_coordination_system.RescueSystemUI`

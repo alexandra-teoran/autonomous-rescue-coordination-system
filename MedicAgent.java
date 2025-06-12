@@ -27,7 +27,7 @@ public class MedicAgent extends Agent {
                     treatedMsg.setContent("TREATED at " + location);
                     send(treatedMsg);
 
-                    System.out.println(getLocalName() + " reported TREATED at: " + location);
+                    System.out.println(getLocalName() + " treated victim at: " + location);
                 } else {
                     block();
                 }
